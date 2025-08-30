@@ -33,7 +33,8 @@ Thumbs.db
 
 # Tailwind CSS
 tailwind.config.js
-postcss.config.js
+# Ensure postcss.config.js is tracked
+!postcss.config.js
 
 # Exclude the specific file if needed
 src/data_analysis_processed_govhack_dataset.jsx
