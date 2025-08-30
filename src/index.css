@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+/* The following @tailwind directives require Tailwind CSS processing via PostCSS.
+   If you see "Unknown at rule @tailwind", ensure your build tool is configured for Tailwind.
+   Remove these lines if you are not using Tailwind CSS. */
+
+
+/* Scope all custom styles under .app-container */
+.app-container {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.app-container button,
+.app-container input,
+.app-container select {
+  font-family: inherit;
+}
+
+.app-container button:focus,
+.app-container input:focus,
+.app-container select:focus {
+  outline: none;
+}
+
+.app-container ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.app-container ::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+}
+
+.app-container ::-webkit-scrollbar-track {
+  background-color: #111;
+}
+
+/* Tailwind CSS directives (if applicable) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset styles for Swagger UI */
+/* Reset styles for Swagger UI */
+.swagger-container {
+  all: revert; /* Revert to browser defaults */
+}
+
+.swagger-container * {
+  all: revert; /* Revert all child elements to browser defaults */
+}
+
+.swagger-container {
+  font-family: Arial, sans-serif; /* Default font for Swagger UI */
+  color: black; /* Reset text color */
+  background-color: white; /* Reset background color */
+}
