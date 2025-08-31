@@ -57,6 +57,91 @@ A dashboard that translates updates into insights everyone can understand:
 
 ---
 
+## NZHEB + TPO Data Story
+
+This outlines how the **New Zealand Health Event Bus (NZHEB)** and the **Target & Productivity Orchestrator (TPO)** deliver value for **individuals**, **government**, and **employers** by connecting health data in real-time and turning it into measurable outcomes.
+
+---
+
+### 🎯 Individuals: Faster Care, Better Outcomes
+
+**The Problem**
+Patients often experience delays in diagnosis and treatment because critical health data is siloed across different systems. Missed prescriptions, long wait times, and unequal access to care create inequities and poorer outcomes.
+
+**How NZHEB Helps**
+- Shares **lab results, immunisations, and admissions** in **real-time** with the care team.
+- Removes delays and duplication by ensuring the right data reaches the right provider instantly.
+
+**How TPO Adds Value**
+- Tracks key metrics such as:
+  - **Lab-to-clinician latency** (e.g., reducing delays from hours to minutes).
+  - **Immunisation coverage** at 24 months.
+  - **Treatment timelines** (e.g., 31-day cancer pathway).
+- Highlights inequities in access so that interventions can be targeted where most needed.
+
+**Impact Example**
+- A patient’s **lab results** are shared live with their GP and hospital specialist.
+- Diagnosis and treatment decisions happen sooner, leading to faster recovery.
+- **Avoided delays** reduce anxiety and improve quality of life.
+
+---
+
+### 🏛 Government: Smarter Policy, Cost Savings, and Equity
+
+**The Problem**
+Health system performance is hard to measure in real-time. Governments face challenges in proving ROI for investments and in identifying inequities across communities until it’s too late.
+
+**How NZHEB Helps**
+- Breaks down silos by connecting ED, GP, and lab systems into a **real-time national view**.
+- Ensures decision-makers can track health system performance **as it happens**.
+
+**How TPO Adds Value**
+- Translates event flows into **cost savings** and **productivity gains**:
+  - Reducing avoidable ED visits by 10% saves **~$100M annually**.
+  - Cutting unfilled prescriptions by 5% prevents **10,000 hospital admissions** (~$30M).
+  - A 2% smoking reduction lowers costs by **$200M**.
+  - Reducing high psychological distress by 3% returns **$150M** in productivity.
+- Provides equity dashboards to identify gaps in access for different communities.
+
+**Impact Example**
+- Government can see **unmet GP needs** in real-time.
+- Targeted funding or policy changes (e.g., GP subsidies) are deployed faster.
+- Avoidable costs are reduced while ensuring equity in access.
+
+---
+
+### 🏢 Employers: Healthy Workforce, Higher Productivity
+
+**The Problem**
+Employers carry the cost of lost productivity due to employee ill-health. Sick leave, delays in treatment, and preventable conditions reduce workforce participation and increase costs for businesses.
+
+**How NZHEB Helps**
+- Ensures that employees receive **timely care** by enabling real-time coordination between providers.
+- Reduces delays in diagnosis and treatment that lead to extended time away from work.
+
+**How TPO Adds Value**
+- Tracks metrics relevant to workforce productivity, such as:
+  - Avoidable ED visits.
+  - Missed GP appointments.
+  - Rates of smoking, hazardous drinking, and mental distress.
+- Converts improvements into measurable workforce gains.
+
+**Impact Example**
+- Reducing psychological distress by 3% nationally translates into **fewer sick days** and **higher workforce participation**.
+- Employers benefit from reduced downtime and a healthier, more productive workforce.
+
+---
+
+### 📊 Summary
+
+- **Individuals** gain from **faster care** and better outcomes.
+- **Government** gains **real-time visibility**, enabling smarter policy and measurable ROI.
+- **Employers** benefit from a **healthier workforce**, reducing sick days and boosting productivity.
+
+Together, **NZHEB + TPO** transform healthcare data into actionable insights that drive **efficiency, equity, and better outcomes** across New Zealand.
+
+---
+
 ## Equity Evidence
 We tested the prototype concept against **six real indicators** (GovHack datasets: MoH/Te Whatu Ora):
 
