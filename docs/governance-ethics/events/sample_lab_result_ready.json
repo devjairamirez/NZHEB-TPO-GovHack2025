@@ -1,0 +1,35 @@
+{
+  "specversion": "1.0",
+  "type": "nzheb.lab.result.ready",
+  "source": "lab-system/WellingtonLab",
+  "id": "evt-123456",
+  "time": "2025-08-31T10:05:00Z",
+  "datacontenttype": "application/fhir+json",
+  "data": {
+    "resourceType": "DiagnosticReport",
+    "id": "dr-2025-888",
+    "status": "final",
+    "code": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "718-7",
+          "display": "Haemoglobin"
+        }
+      ]
+    },
+    "subject": {
+      "reference": "Patient/anon-9876"
+    },
+    "issued": "2025-08-31T10:04:59Z",
+    "result": [
+      {
+        "reference": "Observation/obs-123"
+      }
+    ]
+  },
+  "extensions": {
+    "privacy": "zero-phi",
+    "data_governance": "Te Tiriti principles (represented without personal identifiers)"
+  }
+}

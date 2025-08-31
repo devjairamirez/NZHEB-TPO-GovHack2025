@@ -1,0 +1,11 @@
+timestamp,event_id,producer,consumer,action,status
+2025-08-31T10:05:00Z,evt-123456,lab-system/WellingtonLab,nzheb,publish,ok
+2025-08-31T10:05:01Z,evt-123456,nzheb,ehr-gp-123,deliver,ok
+2025-08-31T10:05:02Z,evt-123456,nzheb,patient-portal-01,deliver,ok
+2025-08-31T10:05:03Z,evt-123456,nzheb,tpo-analytics,deliver,ok
+2025-08-31T10:23:10Z,evt-123456,tpo-analytics,tpo-analytics,compute_kpi,ok
+2025-08-31T00:23:10Z,evt-123456,lab-system/WellingtonLab,nzheb,publish,ok
+2025-08-31T00:23:10Z,evt-123456,nzheb,ehr-gp-123,deliver,ok
+2025-08-31T00:23:10Z,evt-123456,nzheb,patient-portal-01,deliver,ok
+2025-08-31T00:23:10Z,evt-123456,nzheb,tpo-analytics,deliver,ok
+2025-08-31T00:23:10Z,evt-123456,tpo-analytics,tpo-analytics,compute_kpi,ok

@@ -1,0 +1,427 @@
+openapi: 3.0.3
+info:
+  title: NZHEB — New Zealand Health Event Bus (API-first)
+  version: 1.0.0
+  description: 'API-first producer/consumer interface for NZHEB (New Zealand Health
+    Event Bus).
+
+    - **Standards**: CloudEvents 1.0 + FHIR R4 payloads
+
+    - **Privacy**: Zero‑PHI enforced at gateway (hashed linkage identifiers only)
+
+    - **Branding**: Always **NZHEB** (not NHEB)
+
+    - **Intended Use**: GovHack NZ 2025 prototype; easily adaptable to real integrations
+
+
+    ### Quick Start
+
+    1. Obtain an API key from the NZHEB Portal (prototype).
+
+    2. **Producers** POST CloudEvents to `/nzheb/events`.
+
+    3. **Consumers** GET `/nzheb/events/stream` (poll) or connect to `/nzheb/events/sse`
+    (server‑sent events).
+
+    4. TPO analytics consume the same endpoints.
+
+
+
+    ### Architecture Flow (High-level)
+
+    1. **Producers** (ED systems, GP PMS, Lab LIS, Immunisation registers) POST CloudEvents
+    to `/nzheb/events`.
+
+    2. **NZHEB Gateway** validates: API key, CloudEvents 1.0, JSON Schema, and Zero-PHI
+    constraints.
+
+    3. **Event Router** fan-outs validated events to storage and delivery channels.
+
+    4. **Consumers** (TPO, employer dashboards, government analytics, audit services)
+    read via `/nzheb/events/stream` or `/nzheb/events/sse`.
+
+
+    ### Implementation Components (reference)
+
+    - API Gateway (rate limiting, auth): e.g., Kong / Apigee / AWS API Gateway
+
+    - AuthN/Z: API Keys (prototype), JWT (future), mTLS (provider-to-provider)
+
+    - Schema Registry/Validation: JSON Schema for `data`, FHIR R4 profiles
+
+    - Event Store: Kafka topic / Kinesis stream / durable queue + object store
+
+    - Delivery: Polling (REST) & Live (SSE)
+
+    - Observability: Central logs, metrics, traces (e.g., OpenTelemetry)
+
+    '
+servers:
+- url: https://api.dev.nzheb.nz
+  description: Prototype server (demo)
+- url: http://localhost:8080
+  description: Local dev
+tags:
+- name: Producers
+  description: Publish clinical events into NZHEB
+- name: Consumers
+  description: Consume NZHEB events by type or filter
+- name: System
+  description: Health, schemas, and operational endpoints
+paths:
+  /nzheb/events:
+    post:
+      tags:
+      - Producers
+      summary: Publish a CloudEvent (Zero‑PHI enforced)
+      description: 'Producers submit CloudEvents 1.0 envelopes. `data` contains FHIR‑aligned
+        fields or
+
+        references; identifiable PHI must not be sent. Use hashed linkage IDs (e.g.,
+        `hash:<digest>`).
+
+        '
+      operationId: publishEvent
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/cloudevents+json:
+            schema:
+              $ref: '#/components/schemas/CloudEvent'
+            examples:
+              LabResultReady:
+                value:
+                  specversion: '1.0'
+                  type: LabResultReady
+                  source: LabSysA
+                  id: nzheb-event-001
+                  time: '2025-08-30T09:45:00Z'
+                  subject: PatientRef:hash:9a7f3...
+                  datacontenttype: application/json
+                  data:
+                    PatientRef: hash:9a7f3...
+                    LabID: LABX999
+                    Status: Completed
+                    Result: Positive
+              ImmunisationUpdated:
+                value:
+                  specversion: '1.0'
+                  type: ImmunisationUpdated
+                  source: GPClinic123
+                  id: nzheb-event-002
+                  time: '2025-08-30T09:50:00Z'
+                  subject: PatientRef:hash:ab12cd...
+                  datacontenttype: application/json
+                  data:
+                    PatientRef: hash:ab12cd...
+                    VaccineCode: MMR
+                    Dose: '2'
+                    Status: Completed
+      responses:
+        '202':
+          description: Accepted and validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ack'
+              examples:
+                accepted:
+                  value:
+                    ackId: nzheb-ack-456
+                    status: accepted
+                    validated: true
+                    receivedAt: '2025-08-30T09:45:01Z'
+        '400':
+          description: Validation error (schema or Zero‑PHI violation)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalid:
+                  value:
+                    code: VALIDATION_ERROR
+                    message: Missing required 'type' or PHI detected
+        '401':
+          description: Authentication required
+        '403':
+          description: Not authorized for this producer
+  /nzheb/events/stream:
+    get:
+      tags:
+      - Consumers
+      summary: Pull events (polling)
+      operationId: streamEvents
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - in: query
+        name: type
+        required: false
+        description: Filter by event type (e.g., LabResultReady, ImmunisationUpdated)
+        schema:
+          $ref: '#/components/schemas/EventType'
+      - in: query
+        name: since
+        required: false
+        description: ISO timestamp; return events at/after this time
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      responses:
+        '200':
+          description: A batch of events
+          headers:
+            X-NZHEB-Next-Since:
+              description: Cursor for the next poll
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloudEvent'
+              examples:
+                batch:
+                  value:
+                  - specversion: '1.0'
+                    type: LabResultReady
+                    source: LabSysA
+                    id: nzheb-event-001
+                    time: '2025-08-30T09:45:00Z'
+                    subject: PatientRef:hash:9a7f3...
+                    datacontenttype: application/json
+                    data:
+                      PatientRef: hash:9a7f3...
+                      LabID: LABX999
+                      Status: Completed
+                      Result: Positive
+  /nzheb/events/sse:
+    get:
+      tags:
+      - Consumers
+      summary: Server‑Sent Events (live stream)
+      description: Connect with `EventSource` or curl to receive events in real time.
+      operationId: sseEvents
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: text/event-stream with CloudEvents JSON per message
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              examples:
+                sse:
+                  value: 'event: LabResultReady
+
+                    id: nzheb-event-001
+
+                    data: {"specversion":"1.0","type":"LabResultReady","source":"LabSysA","id":"nzheb-event-001","time":"2025-08-30T09:45:00Z","data":{"PatientRef":"hash:9a7f3...","LabID":"LABX999","Status":"Completed","Result":"Positive"}}
+
+                    '
+  /nzheb/schemas/{eventType}:
+    get:
+      tags:
+      - System
+      summary: Retrieve JSON Schema for a given eventType
+      operationId: getSchema
+      parameters:
+      - in: path
+        name: eventType
+        required: true
+        schema:
+          $ref: '#/components/schemas/EventType'
+      responses:
+        '200':
+          description: JSON Schema of the event's `data` payload
+          content:
+            application/schema+json:
+              schema:
+                type: object
+              examples:
+                LabResultReady:
+                  value:
+                    $schema: https://json-schema.org/draft/2020-12/schema
+                    title: LabResultReady
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - PatientRef
+                    - LabID
+                    - Status
+                    - Result
+                    properties:
+                      PatientRef:
+                        type: string
+                        pattern: '^hash:'
+                      LabID:
+                        type: string
+                      Status:
+                        type: string
+                        enum:
+                        - Completed
+                        - Partial
+                        - Error
+                      Result:
+                        type: string
+        '404':
+          description: Unknown event type
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Use: Authorization: Bearer <API-Key>'
+  schemas:
+    EventType:
+      type: string
+      enum:
+      - LabResultReady
+      - ReferralRegistered
+      - ImmunisationUpdated
+      - EDStatusChanged
+      - DischargeSummaryReady
+      - Custom
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        time:
+          type: string
+          format: date-time
+    Ack:
+      type: object
+      properties:
+        ackId:
+          type: string
+        status:
+          type: string
+          enum:
+          - accepted
+          - rejected
+        validated:
+          type: boolean
+        receivedAt:
+          type: string
+          format: date-time
+      required:
+      - ackId
+      - status
+      - validated
+      - receivedAt
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    CloudEvent:
+      type: object
+      additionalProperties: false
+      required:
+      - specversion
+      - type
+      - source
+      - id
+      - time
+      - data
+      properties:
+        specversion:
+          type: string
+          example: '1.0'
+        type:
+          $ref: '#/components/schemas/EventType'
+        source:
+          type: string
+          example: LabSysA
+        id:
+          type: string
+          example: nzheb-event-001
+        time:
+          type: string
+          format: date-time
+          example: '2025-08-30T09:45:00Z'
+        subject:
+          type: string
+          description: Optional subject, may include hashed linkage key (e.g., 'PatientRef:hash:abc123')
+        datacontenttype:
+          type: string
+          example: application/json
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/LabResultReadyData'
+          - $ref: '#/components/schemas/ImmunisationUpdatedData'
+          - $ref: '#/components/schemas/GenericData'
+    GenericData:
+      type: object
+      additionalProperties: true
+      properties:
+        PatientRef:
+          type: string
+          pattern: '^hash:'
+    LabResultReadyData:
+      type: object
+      additionalProperties: false
+      required:
+      - PatientRef
+      - LabID
+      - Status
+      - Result
+      properties:
+        PatientRef:
+          type: string
+          pattern: '^hash:'
+        LabID:
+          type: string
+        Status:
+          type: string
+          enum:
+          - Completed
+          - Partial
+          - Error
+        Result:
+          type: string
+    ImmunisationUpdatedData:
+      type: object
+      additionalProperties: false
+      required:
+      - PatientRef
+      - VaccineCode
+      - Dose
+      - Status
+      properties:
+        PatientRef:
+          type: string
+          pattern: '^hash:'
+        VaccineCode:
+          type: string
+          example: MMR
+        Dose:
+          type: string
+          example: '2'
+        Status:
+          type: string
+          enum:
+          - Completed
+          - Declined
+          - Contraindicated
+          - Deferred

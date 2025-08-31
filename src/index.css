@@ -1,8 +1,12 @@
+/* Tailwind CSS directives (if applicable) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 /* The following @tailwind directives require Tailwind CSS processing via PostCSS.
    If you see "Unknown at rule @tailwind", ensure your build tool is configured for Tailwind.
    Remove these lines if you are not using Tailwind CSS. */
-
 
 /* Scope all custom styles under .app-container */
 .app-container {
@@ -36,11 +40,6 @@
 .app-container ::-webkit-scrollbar-track {
   background-color: #111;
 }
-
-/* Tailwind CSS directives (if applicable) */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Reset styles for Swagger UI */
 /* Reset styles for Swagger UI */

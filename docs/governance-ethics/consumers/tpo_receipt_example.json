@@ -1,0 +1,28 @@
+{
+  "metric": "Lab_to_Clinician_Latency_p95",
+  "period": "2025-08",
+  "population_count": 1240,
+  "value_minutes": 18,
+  "target_minutes": 30,
+  "formula": "p95(time(result_ready -> clinician_viewed))",
+  "inputs": {
+    "result_ready_time": "2025-08-31T10:05:00Z",
+    "clinician_viewed_time_example": "2025-08-31T10:23:00Z"
+  },
+  "dataset_anchors": [
+    "Te Whatu Ora Labs FHIR streams (published)",
+    "Stats NZ median wage (2024) for ROI conversions",
+    "Ministry of Health target: \u226430 minutes (where applicable)"
+  ],
+  "equity_example": {
+    "group": "Maori",
+    "group_latency_p95": 24,
+    "national_latency_p95": 18,
+    "gap_minutes": 6
+  },
+  "audit": {
+    "event_id": "evt-123456",
+    "consumer_id": "tpo-analytics",
+    "processed_at": "2025-08-31T10:23:10Z"
+  }
+}
