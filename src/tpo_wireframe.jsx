@@ -148,7 +148,7 @@ function IndividualsTab() {
               <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
               <XAxis dataKey="month" stroke="#9ca3af" />
               <YAxis stroke="#9ca3af" />
-              <Tooltip />
+              <Tooltip contentStyle={{ background: "#000000", border: "1px solid #262626" }} />
               <Line type="monotone" dataKey="p95" stroke="#60a5fa" />
             </LineChart>
           </ResponsiveContainer>
@@ -161,7 +161,7 @@ function IndividualsTab() {
               <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
               <XAxis dataKey="group" stroke="#9ca3af" />
               <YAxis stroke="#9ca3af" />
-              <Tooltip />
+              <Tooltip contentStyle={{ background: "#000000", border: "1px solid #262626" }} />
               <Bar dataKey="pct" fill="#34d399" />
             </BarChart>
           </ResponsiveContainer>

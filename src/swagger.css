@@ -1,0 +1,14 @@
+/* Reset styles for Swagger UI */
+.swagger-container {
+  all: revert; /* Revert to browser defaults */
+}
+
+.swagger-container * {
+  all: revert; /* Revert all child elements to browser defaults */
+}
+
+.swagger-container {
+  font-family: Arial, sans-serif; /* Default font for Swagger UI */
+  color: black; /* Reset text color */
+  background-color: white; /* Reset background color */
+}
