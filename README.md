@@ -122,7 +122,7 @@ Our prototype, **NZHEB + TPO**, shows how a simple backbone could:
 - ⚖️ Make inequities visible
 - 🚑 Deliver fairer, faster outcomes for all New Zealanders
 
-⚡ **In short: A prototype vision for a connected, measurable, and equitable health system.**ogs or raise an issue in the repository.
+⚡ **In short: A prototype vision for a connected, measurable, and equitable health system.**
 
 ## License
 See `LICENSE` for details.
